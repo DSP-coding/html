@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+            visibility: hidden; /* Hide all content initially */
+        }
+        h1 {
+            color: #333;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 50px);
+            grid-gap: 5px;
+            margin-bottom: 20px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: #ccc;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .cell.checked {
+            background-color: #0f0; /* Green for selected cells */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cognitive Test</h1>
+    <h2>Round {{ round }} of {{ max_rounds }}</h2>
+    <form method="POST" action="">
+        <div class="grid">
+            {% for i in range(4) %}
+                {% for j in range(4) %}
+                    <!-- Mirroring the input by adjusting the j index to (3 - j) -->
+                    <div class="cell" onclick="toggleCell(this, {{ i }}, {{ 3 - j }})">
+                        <input type="checkbox" name="cell_{{ i }}_{{ 3 - j }}" id="cell_{{ i }}_{{ 3 - j }}" 
+                        {% if user_pattern and user_pattern[i][3 - j] %} checked {% endif %} style="display: none;">
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <button type="submit">Submit Pattern</button>
+    </form>
+    <script>
+        function toggleCell(cell, row, col) {
+            const checkbox = cell.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            cell.classList.toggle('checked', checkbox.checked);
+        }
+
+        // Show the content after a 6-second delay
+        window.onload = function() {
+            setTimeout(function() {
+                document.body.style.visibility = 'visible'; // Show the content
+            }, 8000); // 6000 milliseconds = 6 seconds
+        };
+    </script>
+</body>
+</html>
